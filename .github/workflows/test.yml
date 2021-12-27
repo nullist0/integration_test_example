@@ -1,4 +1,4 @@
-name: build
+name: test
 on:
   push:
     branches:
@@ -25,16 +25,23 @@ jobs:
             /usr/local/lib/android/adk
             ~/.android
       - name: Setup Android SDK
-        if: steps.android-sdk.outputs.cache-hit != 'true'
         uses: android-actions/setup-android@v2
+      - name: Download bundletool
+        run: |
+          wget https://github.com/google/bundletool/releases/download/1.8.2/bundletool-all-1.8.2.jar
+          mkdir $ANDROID_SDK_ROOT/bundletool
+          mv bundletool-all-1.8.2.jar $ANDROID_SDK_ROOT/bundletool/bundletool.jar
+          echo "BUNDLE_TOOL=$ANDROID_SDK_ROOT/bundletool/bundletool.jar" >> $GITHUB_ENV
+          echo "ADB=$ANDROID_SDK_ROOT/platform-tools/adb" >> $GITHUB_ENV
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: 'master'
       - name: Run integration tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 28
           script: |
             flutter doctor -v
-            flutter test integration_test --verbose
+            $FLUTTER_ROOT/dev/integration_tests/deferred_components_test/download_assets.sh
+            $FLUTTER_ROOT/dev/integration_tests/deferred_components_test/run_release_test.sh $BUNDLE_TOOL $ADB
