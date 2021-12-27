@@ -28,8 +28,8 @@ jobs:
         uses: android-actions/setup-android@v2
       - name: Download bundletool
         run: |
-          curl https://storage.googleapis.com/chrome-infra-packages/store/SHA256/bc5b758c0d1c51e64b994095479346d89541f92809d7c187fe955828c3a57d42?Expires=1640627012&GoogleAccessId=chrome-infra-packages%40appspot.gserviceaccount.com&Signature=XAlM0cnBvvagnikDs3eLmY5xAteCyhdK%2BU8C%2FDg%2B34EArX41G5eKUhAAmFTRvQv7XsC12aeI6GUuK%2Bctum28dkVhwa2BViTSkUX4dGOP51HvQfK1vbmjpcpofGrj9EHOZz7%2BBnjTx3%2BE%2FzfZfpe%2Fdd2lgPcYdoUvr4%2B08TRBb%2BxM13PR8EJmmnuy9iwK2e74emiyrpg7YQSSEpxhd8eu1wn5haZFmKbqmGAF5JRRz%2Fjgk1LI%2BqZVQhUx8WMlPuYdgmstgXnbPkXGhbV5B4T%2F%2BX0b33lf6oVYt%2FYg14iRfEHdzYi3akctlGEKmQz0Hd%2FtoGPoz1S8oQ6HLUKc1X0HwQ%3D%3D&response-content-disposition=attachment%3B+filename%3D%22android-bundletool.zip%22 > bundletool.zip
-          unzip bundletool.zip -d $ANDROID_SDK_ROOT/bundletool
+          mkdir $ANDROID_SDK_ROOT/bundletool
+          mv bundletool.jar $ANDROID_SDK_ROOT/bundletool/bundletool.jar
           echo "BUNDLE_TOOL=$ANDROID_SDK_ROOT/bundletool/bundletool.jar" >> $GITHUB_ENV
           echo "ADB=$ANDROID_SDK_ROOT/platform-tools/adb" >> $GITHUB_ENV
       - name: Setup Flutter SDK
