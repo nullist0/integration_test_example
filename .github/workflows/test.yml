@@ -42,5 +42,5 @@ jobs:
           api-level: 28
           script: |
             flutter doctor -v
-            $FLUTTER_ROOT/dev/integration_tests/deferred_components_test/download_assets.sh
-            $FLUTTER_ROOT/dev/integration_tests/deferred_components_test/run_release_test.sh $BUNDLE_TOOL $ADB
+            ./download_assets.sh
+            flutter test integration_test && ./run_release_test.sh BUNDLE_TOOL $ADB
