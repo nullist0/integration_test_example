@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - change_git_link
   pull_request:
     branches:
       - master
