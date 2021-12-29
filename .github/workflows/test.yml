@@ -27,21 +27,16 @@ jobs:
             ~/.android
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
-      - name: Download bundletool
-        run: |
-          mkdir $ANDROID_SDK_ROOT/bundletool
-          mv bundletool.jar $ANDROID_SDK_ROOT/bundletool/bundletool.jar
-          echo "BUNDLE_TOOL=$ANDROID_SDK_ROOT/bundletool/bundletool.jar" >> $GITHUB_ENV
-          echo "ADB=$ANDROID_SDK_ROOT/platform-tools/adb" >> $GITHUB_ENV
       - name: Setup Flutter SDK
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'master'
+        run: |
+          git clone https://github.com/nullist0/flutter.git $HOME/flutter
+          $HOME/flutter/bin/flutter doctor -v
+          FLUTTER_ROOT="$HOME/flutter"
+          echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
       - name: Run integration tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 28
           script: |
             flutter doctor -v
-            ./download_assets.sh
-            flutter test integration_test && ./run_release_test.sh BUNDLE_TOOL $ADB
+            flutter test integration_test --verbose
